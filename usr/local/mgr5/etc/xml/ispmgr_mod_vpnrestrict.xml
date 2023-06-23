@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mgrdata>
+    <handler name="vpnrestrict" type="xml">.
+         <event name="webdomain.edit" after="yes" />.
+    </handler>
+
+    <metadata name="site.edit" type="form">
+        <form>
+            <page name="mainsettings">
+                <field name="site_vpnrestrict">
+                    <input type="checkbox" name="site_vpnrestrict" />
+                </field>
+            </page>
+        </form>
+    </metadata>
+
+    <metadata name="webdomain.edit" type="form">
+        <form>
+            <page name="mainsettings">
+                <field name="vpnrestrict">
+                    <input type="checkbox" name="vpnrestrict" />
+                </field>
+            </page>
+        </form>
+    </metadata>
+
+    <lang name="ru">
+        <messages name="webdomain.edit">
+            <msg name="vpnrestrict">Ограничения по VPN</msg>
+            <msg name="hint_vpnrestrict">Включение ограничения http-доступов по VPN</msg>
+        </messages>
+        <messages name="site.edit">
+            <msg name="site_vpnrestrict">Ограничения по VPN</msg>
+            <msg name="hint_site_vpnrestrict">Включение ограничения http-доступов по VPN</msg>
+        </messages>
+    </lang>
+</mgrdata>

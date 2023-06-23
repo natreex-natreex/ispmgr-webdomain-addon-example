@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [[ "$PARAM_vpnrestrict" = "on" ]]
+        then
+                cat | sed 's|</doc>$|<params><VPNRESTRICT>on</VPNRESTRICT></params></doc>|'
+        else
+                cat | sed 's|</doc>$|<params><VPNRESTRICT>off</VPNRESTRICT></params></doc>|'
+fi
