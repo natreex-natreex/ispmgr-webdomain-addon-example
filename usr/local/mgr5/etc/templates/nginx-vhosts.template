@@ -1,58 +1,8 @@
 server {
-	server_name {% $NAME %} [% $ALIASES %];
-	listen {% $NGINX_LISTEN_ON %} [% $LISTEN_FLAGS %];
-
-{% if $REDIRECT_HTTP == on %}
-	return 301 https://$host:{% $SSL_PORT %}$request_uri;
-{% else %}
-
+...
 	{% if $VPNRESTRICT == on %}
 	allow xxx.xxx.xxx.xxx;
 	deny all;
 	{% endif %}
-
-	charset [% $CHARSET %];
-	index [% $DIRINDEX %];
-	disable_symlinks if_not_owner from=$root_path;
-	ssi off;
-
-	include {% $NGINX_VHOST_INCLUDES %};
-	include {% $INCLUDE_RESOURCE_PATH %};
-
-	set $root_path {% $VIRTUAL_DOCROOT %};
-	root $root_path;
-
-	set $php_sock {% $PHPFPM_USER_SOCKET_PATH %};
-	set $fastcgi_param_admin "";
-	set $fastcgi_param "";
-
-	proxy_set_header X-Real-IP $remote_addr;
-	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-	proxy_set_header Host $host;
-	client_max_body_size 1024M;
-	client_body_buffer_size 4M;
-
-	{% if $LOG_ACCESS == on %}
-	access_log [% $ACCESS_LOG_PATH %];
-	{% else %}
-	access_log off;
-	{% endif %}
-
-	{% if $LOG_ERROR == on %}
-	error_log {% $ERROR_LOG_PATH %} notice;
-	error_log /dev/null crit;
-	{% endif %}
-
-	{% if $SRV_GZIP == on %}
-	gzip on;
-	gzip_comp_level 7;
-	gzip_types application/x-javascript application/javascript text/css;
-	{% endif %}
-
-
-{% endif %}
+...
 }
-
-{% if $SSL == on %}
-{% import etc/templates/nginx-vhosts-ssl.template %}
-{% endif %}
