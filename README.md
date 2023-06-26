@@ -12,9 +12,8 @@
 
 Мы добавляем чекбокс с именем `vpnrestrict`, соответственно наш плагин будет называться `ispmgr_mod_vpnrestrict.xml`
 
+`/usr/local/mgr5/etc/xml/ispmgr_mod_vpnrestrict.xml`
 ```xml
-#/usr/local/mgr5/etc/xml/ispmgr_mod_vpnrestrict.xml
-
 <?xml version="1.0" encoding="UTF-8"?>
 <mgrdata>
 </mgrdata>
@@ -24,9 +23,8 @@
 
 При этом в описании для формы `site.edit` перед именем чекбокса обязательно должен присутствовать префикс `site_`.
 
+`/usr/local/mgr5/etc/xml/ispmgr_mod_vpnrestrict.xml`
 ```xml
-#/usr/local/mgr5/etc/xml/ispmgr_mod_vpnrestrict.xml
-
 <?xml version="1.0" encoding="UTF-8"?>
 <mgrdata>
     <metadata name="site.edit" type="form">
@@ -70,9 +68,8 @@
 
 В файле описания поля можно указать тип, длину, значение по умолчанию, уровень прав пользователя панели на чтение и запись. Нас интересует только тип. У нас указано значение bool, но в IPSmanager значение флагов сохраняется как off/on, поэтому поле будет создано как VARCHAR(3).
 
+`/usr/local/mgr5/etc/sql/webdomain.addon/vpnrestrict`
 ```text
-#/usr/local/mgr5/etc/sql/webdomain.addon/vpnrestrict
-
 type=bool
 ```
 
@@ -82,13 +79,12 @@ type=bool
 
 Основная задача плагина - менять конфигурационный файл nginx для хоста, поэтому нам необходим обработчик. Для добавления обработчика к плагину его нужно описать в xml-файле плагина:
 
+`/usr/local/mgr5/etc/xml/ispmgr_mod_vpnrestrict.xml`
 ```xml
-#/usr/local/mgr5/etc/xml/ispmgr_mod_vpnrestrict.xml
-
 <?xml version="1.0" encoding="UTF-8"?>
 <mgrdata>
-    <handler name="vpnrestrict" type="xml">.
-         <event name="webdomain.edit" after="yes" />.
+    <handler name="vpnrestrict" type="xml">
+         <event name="webdomain.edit" after="yes" />
     </handler>
     ...
 </mgrdata>
@@ -100,8 +96,9 @@ type=bool
 
 Обработчик может быть написан на любом языке. Наш будет bash-скриптом.
 
-В этом файле мы получаем XML, сгенерированный функцией и добавляем в конец значение нашего чекбокса в новом элементе:
+В этом файле мы получаем XML, сгенерированный функцией, и добавляем в конец значение нашего чекбокса в новом элементе:
 
+`/usr/local/mgr5/addon/vpnrestrict`
 ```shell
 #!/bin/bash
 
@@ -116,9 +113,8 @@ cat | sed 's|</doc>$|<params><VPNRESTRICT>'$PARAM_vpnrestrict'</VPNRESTRICT></pa
 
 Нам нужно по условию установленного чекбокса добавить две директивы в шаблон:
 
+`/usr/local/mgr5/etc/templates/nginx-vhosts.template`
 ```text
-#/usr/local/mgr5/etc/templates/nginx-vhosts.template
-
 server {
 ...
 	{% if $VPNRESTRICT == on %}
